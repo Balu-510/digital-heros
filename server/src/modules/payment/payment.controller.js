@@ -12,8 +12,13 @@ const getStripe = () => {
   return stripeInstance;
 };
 
+const PRICE_IDS = {
+  monthly: 'price_1UTfNh8G4a9XVA1YRghvnxMw',
+  yearly: 'price_1UTfOE8G4a9XVA1YWdYoFRBI',
+};
+
 const getConfiguredPrice = (plan) =>
-  plan === 'yearly' ? process.env.STRIPE_PRICE_YEARLY : process.env.STRIPE_PRICE_MONTHLY;
+  plan === 'yearly' ? PRICE_IDS.yearly : PRICE_IDS.monthly;
 
 // Accepts a Price ID (price_...). If a Product ID (prod_...) was configured by mistake,
 // look up that product's active recurring price for the requested billing interval.
@@ -43,8 +48,8 @@ export const createCheckoutSession = async (req, res) => {
     if (!priceId) {
       return res.status(500).json({
         message: configured
-          ? `No active recurring ${plan === 'yearly' ? 'yearly' : 'monthly'} price found in Stripe for STRIPE_PRICE_${plan.toUpperCase()}.`
-          : `STRIPE_PRICE_${plan.toUpperCase()} is not configured.`,
+          ? `No active recurring ${plan === 'yearly' ? 'yearly' : 'monthly'} price found in Stripe for the ${plan} plan.`
+          : `Price ID for the ${plan} plan is not configured.`,
       });
     }
 
