@@ -51,7 +51,6 @@ export const createCheckoutSession = async (req, res) => {
     const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim().replace(/\/$/, '');
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
       mode: 'subscription',
       customer_email: req.user.email,
       client_reference_id: req.user._id.toString(),
